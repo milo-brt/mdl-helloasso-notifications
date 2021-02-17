@@ -1,0 +1,9 @@
+body {
+    height: 100vh;
+    background: linear-gradient(120deg,#69ff97,#00e4ff);
+    background-position: var(--step-background-position);
+}
+
+.accordion-body {
+    background-color: lightgrey;
+}
