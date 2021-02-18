@@ -10,7 +10,7 @@ La [documentation de notre API](https://api.helloasso.com/v5/swagger/ui/index#/)
 # Fonctionnement
 Cette application reçoit la notification (appel POST à la racine) et stock le contenu dans un fichier. Elle permet aussi l'affichage des notifications reçu via une interface de visualisation.
 
-![alt text](https://github.com/HelloAsso/notification-handler-sample/blob/main/doc/front.png?raw=true)
+![alt text](https://github.com/HelloAsso/php-notification-handler-sample/blob/main/doc/front.png?raw=true)
 
 C'est un cas d'application fictif, dans la réalité la notification vous permettra surement de mettre à jour votre S.I. mais une fois la partie réception faite, vous êtes logiquement en maitrise !
 
@@ -49,5 +49,3 @@ curl --request POST \
   --header 'Content-Type: application/json' \
   --data '{"data":{"payer":{"dateOfBirth":"1988-01-04T00:00:00+01:00","email":"eddy@helloasso.org","address":"71 rue mouneyra","city":"Bordeaux","zipCode":"33000","country":"FRA","firstName":"Eddy","lastName":"MONTUS"},"order":{"id":1,"date":"2021-02-17T09:19:40.770879+00:00","formSlug":"vente-de-noel","formType":"PaymentForm","organizationSlug":"demo-boutique"},"items":[{"shareAmount":1000,"shareItemAmount":1000,"id":1,"amount":1000,"type":"Payment","state":"Processed"}],"cashOutState":"Transfered","paymentReceiptUrl":"https:\/\/www.helloasso.com\/associations\/demo-boutique\/paiements\/vente-de-noel\/paiement-attestation\/1","id":7269832,"amount":1000,"date":"2021-02-17T09:19:40.770879+00:00","paymentMeans":"Card","state":"Authorized"},"eventType":"Payment"}'
 ```
-
-Pour une utilisation en production, il suffit de copier l'intégralité du dossier sur votre serveur
