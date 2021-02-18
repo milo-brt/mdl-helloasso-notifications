@@ -20,24 +20,24 @@
         <h1>Console d'administration des notifications HelloAsso</h1>
 
         <p>
-            Vous trouverez ici les différentes notifications reçues sur votre serveur.<br/>
+            Vous trouverez ici les différentes notifications reçues sur votre serveur.<br />
             La date de réception et le type de notification sont affichés par défaut, pour voir le contenu de la notification cliquez sur <i class="fas fa-chevron-down"></i>.
         </p>
 
         <div class="accordion" id="accordion">
-            <?php foreach($data as $key => $value) { ?>
+            <?php foreach ($data as $key => $value) { ?>
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="heading<?php echo $key ?>">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?php echo $key ?>" aria-expanded="false" aria-controls="collapse<?php echo $key ?>">
-                        <?php echo "🗓️ " . $value->date . ' '. ($value->type == "Order" ? "🛒 " : ($value->type == "Payment" ? "💶 " : "🗒️ ")) . $value->type ?>
-                    </button>
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?php echo $key ?>" aria-expanded="false" aria-controls="collapse<?php echo $key ?>">
+                            <?php echo "🗓️ " . $value->date . ' ' . ($value->type == "Order" ? "🛒 " : ($value->type == "Payment" ? "💶 " : "🗒️ ")) . $value->type ?>
+                        </button>
                     </h2>
                     <div id="collapse<?php echo $key ?>" class="accordion-collapse collapse" aria-labelledby="heading<?php echo $key ?>" data-bs-parent="#accordion">
-                    <div class="accordion-body">
-                        <pre><?php echo htmlentities(json_encode(json_decode($value->data), JSON_PRETTY_PRINT)) ?></pre> 
+                        <div class="accordion-body">
+                            <pre><?php echo htmlentities(json_encode(json_decode($value->data), JSON_PRETTY_PRINT)) ?></pre>
+                        </div>
                     </div>
-                    </div>
-                </div>  
+                </div>
             <?php } ?>
         </div>
 
