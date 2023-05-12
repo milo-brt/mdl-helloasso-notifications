@@ -30,7 +30,7 @@ namespace Controllers
         public function post()
         {
             $body = json_decode(file_get_contents('php://input'));
-            $webhookurl = getenv('DISCORD_WEBHOOK_URL');
+            $webhookurl = $_ENV['DISCORD_WEBHOOK_URL'];
 
             // This is here where you can add your own logic
             // You can get all data from $body->data->...
@@ -135,7 +135,7 @@ namespace Controllers
 
             $model = new FileStoreModel();
             $model->date = date("d/m/Y H:i:s");
-            $model->type = $webhookurl;
+            $model->type = $body->eventType;
             $model->data = json_encode($body);
 
             file_put_contents('notification',  serialize($model) . PHP_EOL, FILE_APPEND);

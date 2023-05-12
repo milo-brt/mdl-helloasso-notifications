@@ -10,6 +10,9 @@
     // router
     $router = new AltoRouter();
     $controller = new Controllers\NotificationController();
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    
+    $dotenv->load();
     
     $router->map('GET', '/', 'get');
     $router->map('POST', '/', 'post');
