@@ -30,24 +30,23 @@ namespace Controllers
         public function post()
         {
             $body = json_decode(file_get_contents('php://input'));
-            $webhookurl = "https://discord.com/api/webhooks/1106558716238631082/hiElgApAtoOh_EfqpAaShfy5kW-7B4pS7oMZemXo51cwUPp8XTiQis-4rqPVdQo6yuJL";
+            $webhookurl = getenv('DISCORD_WEBHOOK_URL');
 
             // This is here where you can add your own logic
             // You can get all data from $body->data->...
 
-            if ($body->$eventType == "Payment") {
+            if ($body->eventType == "Payment") {
                 $timestamp = date("c", strtotime("now"));
 
                 $json_data = json_encode([
-                    // Message
-                    "content" => "Hello World! This is message line ;) And here is the mention, use userID <@12341234123412341>",
+                    "content" => "Un nouveau paiement à été effectué sur la boutique en ligne !",
                     
                     // Username
-                    "username" => "krasin.space",
+                    "username" => "MDL - Boutique",
 
                     // Avatar URL.
                     // Uncoment to replace image set in webhook
-                    //"avatar_url" => "https://ru.gravatar.com/userimage/28503754/1168e2bddca84fec2a63addb348c571d.jpg?size=512",
+                    "avatar_url" => "https://cdn.helloasso.com/img/logos/croppedimage-234b7b32a4ab4e269abee0c035e3f36c.png?resize=fill:140:140",
 
                     // Text-to-speech
                     "tts" => false,
