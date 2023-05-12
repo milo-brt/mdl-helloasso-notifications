@@ -14,3 +14,4 @@ jobs:
         server: 65.19.141.67
         username: milobretet
         password: ${{ secrets.ftp_password }}
+        server-dir: httpdocs
