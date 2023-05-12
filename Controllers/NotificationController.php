@@ -62,7 +62,7 @@ namespace Controllers
                                 "type" => "rich",
 
                                 // Embed Description
-                                "description" => $body->data->payer->firstName . " " . $body->data->payer->lastName . " vient de passer une commande pour le bal de promo 2023 d'un total de ".strval($body->data->amount->total/10)."€ !",
+                                "description" => "**" . $body->data->payer->firstName . " " . $body->data->payer->lastName . "** vient de passer une commande pour le bal de promo 2023 d'un total de **".strval($body->data->amount->total/100)."€** !",
 
                                 // URL of title link
                                 "url" => $body->data->payments[0]->paymentReceiptUrl,
