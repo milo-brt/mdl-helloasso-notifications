@@ -38,7 +38,7 @@ namespace Controllers
 
             if ($body->eventType === "Order") {
 
-                if ($body->data->order->formSlug === "bal-de-promo-2023") {
+                if ($body->data->formSlug === "bal-de-promo-2023") {
                     $ch = curl_init($webhookurlbal);
                 
                     $timestamp = date("c", strtotime("now"));
