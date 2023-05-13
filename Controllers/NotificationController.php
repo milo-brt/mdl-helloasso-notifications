@@ -100,6 +100,8 @@ namespace Controllers
             $response = curl_exec( $ch );
             curl_close( $ch );
 
+            date_default_timezone_set('	Europe/Paris');
+
             $model = new FileStoreModel();
             $model->date = date("d/m/Y H:i:s");
             $model->type = $body->eventType;
