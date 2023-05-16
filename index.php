@@ -5,17 +5,21 @@
 
     // project loader
     require 'Controllers/NotificationController.php';
+    require 'Controllers/AuthenticationController.php';
     require 'Models/FileStoreModel.php';
 
     // router
     $router = new AltoRouter();
     $controller = new Controllers\NotificationController();
+    $auth = new Controllers\AuthenticationController();
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
     
     $dotenv->load();
     
     $router->map('GET', '/', 'get');
     $router->map('POST', '/', 'post');
+    $router->map('GET', '/login', 'getAuth');
+    $router->map('POST', '/', 'postAuth');
 
     $match = $router->match();
     

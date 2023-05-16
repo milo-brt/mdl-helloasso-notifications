@@ -1,14 +1,14 @@
 <?php
 
-namespace Controllers
-{
+namespace Controllers {
 
     use Models\FileStoreModel;
 
     class NotificationController
     {
         public function __construct()
-        { }
+        {
+        }
 
         /**
          * Read file 'notification'
@@ -17,9 +17,14 @@ namespace Controllers
          */
         public function get()
         {
-            $data = array_reverse(array_map('unserialize', file('notification')));
+            if (!isset($_COOKIE['token']) || $_COOKIE['token'] != $_ENV['TOKEN']) {
+                header('Location: /login');
+                return [null, null];
+            } else {
+                $data = array_reverse(array_map('unserialize', file('notification')));
 
-            return ["list", $data];
+                return ["list", $data];
+            }
         }
 
         /**
@@ -32,7 +37,7 @@ namespace Controllers
             $body = json_decode(file_get_contents('php://input'));
             $webhookurl = $_ENV['DISCORD_WEBHOOK_URL'];
             $webhookurlbal = $_ENV['DISCORD_WEBHOOK_URL_BAL'];
-            $ch = curl_init( $webhookurl );
+            $ch = curl_init($webhookurl);
 
             $json_data = "";
 
@@ -40,12 +45,12 @@ namespace Controllers
 
                 if ($body->data->formSlug === "bal-de-promo-2023") {
                     $ch = curl_init($webhookurlbal);
-                
+
                     $timestamp = date("c", strtotime("now"));
 
                     $json_data = json_encode([
                         "username" => "MDL - Bal de Promo",
-                        "avatar_url" => 
+                        "avatar_url" =>
                         "https://cdn.helloasso.com/img/logos/croppedimage-234b7b32a4ab4e269abee0c035e3f36c.png?resize=fill:140:140",
                         "tts" => false,
 
@@ -62,7 +67,7 @@ namespace Controllers
                                 "type" => "rich",
 
                                 // Embed Description
-                                "description" => "**" . $body->data->payer->firstName . " " . $body->data->payer->lastName . "** vient de passer une commande pour le bal de promo 2023 d'un total de **".strval($body->data->amount->total/100)."€** !",
+                                "description" => "**" . $body->data->payer->firstName . " " . $body->data->payer->lastName . "** vient de passer une commande pour le bal de promo 2023 d'un total de **" . strval($body->data->amount->total / 100) . "€** !",
 
                                 // URL of title link
                                 "url" => "https://lokiwi.helioho.st/",
@@ -71,7 +76,7 @@ namespace Controllers
                                 "timestamp" => $timestamp,
 
                                 // Embed left border color in HEX
-                                "color" => hexdec( "ffffff" ),
+                                "color" => hexdec("ffffff"),
 
                                 // Image to send
                                 "image" => [
@@ -83,22 +88,22 @@ namespace Controllers
                                     "name" => "Hip hip hip, hourra !"
                                 ]
                             ]
-                            
+
                         ]
 
-                    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+                    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                 }
             }
 
-            curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
-            curl_setopt( $ch, CURLOPT_POST, 1);
-            curl_setopt( $ch, CURLOPT_POSTFIELDS, $json_data);
-            curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt( $ch, CURLOPT_HEADER, 0);
-            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-            $response = curl_exec( $ch );
-            curl_close( $ch );
+            $response = curl_exec($ch);
+            curl_close($ch);
 
             date_default_timezone_set('	Europe/Paris');
 
@@ -107,8 +112,8 @@ namespace Controllers
             $model->type = $body->eventType;
             $model->data = json_encode($body);
 
-            file_put_contents('notification',  serialize($model) . PHP_EOL, FILE_APPEND);
-            
+            file_put_contents('notification', serialize($model) . PHP_EOL, FILE_APPEND);
+
             return [null, null];
         }
     }
