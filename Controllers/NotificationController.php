@@ -37,18 +37,16 @@ namespace Controllers {
             $body = json_decode(file_get_contents('php://input'));
             $webhookurl = $_ENV['DISCORD_WEBHOOK_URL'];
             $webhookurlbal = $_ENV['DISCORD_WEBHOOK_URL_BAL'];
-            $ch = curl_init($webhookurl);
-
-            $json_data = "";
+            $urls = [$webhookurl];
+            $messages = [file_get_contents('php://input')];
 
             if ($body->eventType === "Order") {
 
                 if ($body->data->formSlug === "bal-de-promo-2023") {
-                    $ch = curl_init($webhookurlbal);
-
+                    array_push($urls, $webhookurlbal);
                     $timestamp = date("c", strtotime("now"));
 
-                    $json_data = json_encode([
+                    array_push($messages, json_encode([
                         "username" => "MDL - Bal de Promo",
                         "avatar_url" =>
                         "https://cdn.helloasso.com/img/logos/croppedimage-234b7b32a4ab4e269abee0c035e3f36c.png?resize=fill:140:140",
@@ -67,10 +65,13 @@ namespace Controllers {
                                 "type" => "rich",
 
                                 // Embed Description
-                                "description" => "**" . $body->data->payer->firstName . " " . $body->data->payer->lastName . "** vient de passer une commande pour le bal de promo 2023 d'un total de **" . strval($body->data->amount->total / 100) . "€** !",
-
-                                // URL of title link
-                                "url" => "https://lokiwi.helioho.st/",
+                                "description" => "**" . $body->data->payer->firstName . " "
+                                . $body->data->payer->lastName . "** en **"
+                                . $body->data->items[0]->customFields[2]->answer
+                                . "** vient de passer une commande pour le bal de promo d'un total de **"
+                                . strval($body->data->amount->total / 100) . "€** ! Ce(tte) visiteur(euse) "
+                                . ($body->data->items[0]->customFields[0]->answer === "Oui" ? "participera" : "ne participera pas")
+                                . "à l'élection du roi/de la reine du bal.",
 
                                 // Timestamp of embed must be formatted as ISO8601
                                 "timestamp" => $timestamp,
@@ -78,32 +79,46 @@ namespace Controllers {
                                 // Embed left border color in HEX
                                 "color" => hexdec("ffffff"),
 
-                                // Image to send
-                                "image" => [
-                                    "url" => "https://media.giphy.com/media/U4DswrBiaz0p67ZweH/giphy.gif"
-                                ],
-
                                 // Author
                                 "author" => [
-                                    "name" => "Hip hip hip, hourra !"
+                                    "name" => array_rand([
+                                        "Hip hip hip, hourra !",
+                                        "Je pète ma bière, ma lubulule",
+                                        "Mais c'est tout simplement une hallucination collective",
+                                        "Parce que c'est notre projet",
+                                        "Mais voilà mais c'était sûr en fait",
+                                        "Véronique fait un infarctus",
+                                        "Mais oui c'est clair",
+                                        "Encore, ça fait beaucoup là non ? (non)",
+                                        "Je possède des thunes (ouais), je suis à l'aise financièrement",
+                                        "Bien évidemment, bien évidemment, bien évidemmeeeeeeent",
+                                        "Woaw qu'est-ce que c'est que ce truc là ?",
+                                        "Ohhhh, j'ai le droit de vivre un peu ?",
+                                        "Par la poudre de perlimpinpin",
+                                        "T'es qui toi ? Beh je suis Pamela",
+                                        "Ouh lala c'est la décadenceinnn"
+                                    ])
                                 ]
                             ]
 
                         ]
 
-                    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
                 }
             }
 
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            foreach ($urls as $key => $value) {
+                $ch = curl_init($value);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $messages[$key]);
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+                curl_setopt($ch, CURLOPT_HEADER, 0);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-            $response = curl_exec($ch);
-            curl_close($ch);
+                $response = curl_exec($ch);
+                curl_close($ch);
+            }
 
             date_default_timezone_set('	Europe/Paris');
 
