@@ -38,7 +38,7 @@ namespace Controllers {
             $webhookurl = $_ENV['DISCORD_WEBHOOK_URL'];
             $webhookurlbal = $_ENV['DISCORD_WEBHOOK_URL_BAL'];
             $urls = [$webhookurl];
-            $messages = [json_encode(["content" => json_decode(file_get_contents('php://input'))], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)];
+            $messages = [];
             $fun = [
                 "Hip hip hip, hourra !",
                 "Je pète ma bière, ma lubulule",
@@ -63,7 +63,7 @@ namespace Controllers {
                     array_push($urls, $webhookurlbal);
                     $timestamp = date("c", strtotime("now"));
 
-                    array_push($messages, json_encode([
+                    $disc = [
                         "username" => "MDL - Bal de Promo",
                         "avatar_url" =>
                         "https://cdn.helloasso.com/img/logos/croppedimage-234b7b32a4ab4e269abee0c035e3f36c.png?resize=fill:140:140",
@@ -104,7 +104,10 @@ namespace Controllers {
 
                         ]
 
-                    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+                    ];
+
+                    array_push($messages, json_encode($disc, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+                    array_push($messages, json_encode($disc, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
                 }
             }
 
