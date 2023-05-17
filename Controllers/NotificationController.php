@@ -38,7 +38,24 @@ namespace Controllers {
             $webhookurl = $_ENV['DISCORD_WEBHOOK_URL'];
             $webhookurlbal = $_ENV['DISCORD_WEBHOOK_URL_BAL'];
             $urls = [$webhookurl];
-            $messages = [file_get_contents('php://input')];
+            $messages = [json_encode(["content" => json_decode(file_get_contents('php://input'))], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)];
+            $fun = [
+                "Hip hip hip, hourra !",
+                "Je pète ma bière, ma lubulule",
+                "Mais c'est tout simplement une hallucination collective",
+                "Parce que c'est notre projet",
+                "Mais voilà mais c'était sûr en fait",
+                "Véronique fait un infarctus",
+                "Mais oui c'est clair",
+                "Encore, ça fait beaucoup là non ? (non)",
+                "Je possède des thunes (ouais), je suis à l'aise financièrement",
+                "Bien évidemment, bien évidemment, bien évidemmeeeeeeent",
+                "Woaw qu'est-ce que c'est que ce truc là ?",
+                "Ohhhh, j'ai le droit de vivre un peu ?",
+                "Par la poudre de perlimpinpin",
+                "T'es qui toi ? Beh je suis Pamela",
+                "Ouh lala c'est la décadenceinnn"
+            ];
 
             if ($body->eventType === "Order") {
 
@@ -71,7 +88,7 @@ namespace Controllers {
                                 . "** vient de passer une commande pour le bal de promo d'un total de **"
                                 . strval($body->data->amount->total / 100) . "€** ! Ce(tte) visiteur(euse) "
                                 . ($body->data->items[0]->customFields[0]->answer === "Oui" ? "participera" : "ne participera pas")
-                                . "à l'élection du roi/de la reine du bal.",
+                                . " à l'élection du roi/de la reine du bal.",
 
                                 // Timestamp of embed must be formatted as ISO8601
                                 "timestamp" => $timestamp,
@@ -81,23 +98,7 @@ namespace Controllers {
 
                                 // Author
                                 "author" => [
-                                    "name" => array_rand([
-                                        "Hip hip hip, hourra !",
-                                        "Je pète ma bière, ma lubulule",
-                                        "Mais c'est tout simplement une hallucination collective",
-                                        "Parce que c'est notre projet",
-                                        "Mais voilà mais c'était sûr en fait",
-                                        "Véronique fait un infarctus",
-                                        "Mais oui c'est clair",
-                                        "Encore, ça fait beaucoup là non ? (non)",
-                                        "Je possède des thunes (ouais), je suis à l'aise financièrement",
-                                        "Bien évidemment, bien évidemment, bien évidemmeeeeeeent",
-                                        "Woaw qu'est-ce que c'est que ce truc là ?",
-                                        "Ohhhh, j'ai le droit de vivre un peu ?",
-                                        "Par la poudre de perlimpinpin",
-                                        "T'es qui toi ? Beh je suis Pamela",
-                                        "Ouh lala c'est la décadenceinnn"
-                                    ])
+                                    "name" => $fun[array_rand($fun)]
                                 ]
                             ]
 
