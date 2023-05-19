@@ -60,7 +60,7 @@ namespace Controllers {
             if ($body->eventType === "Order") {
 
                 if ($body->data->formSlug === "bal-de-promo-2023") {
-                    array_push($urls, $webhookurl);
+                    array_push($urls, $webhookurlbal);
                     $timestamp = date("c", strtotime("now"));
 
                     $disc = [
