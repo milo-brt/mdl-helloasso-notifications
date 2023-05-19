@@ -119,7 +119,7 @@ namespace Controllers {
                                 . "Participation à l'élection : **" . $item->customFields[0]->answer . "**"
                             ]);
                         }
-                        echo $l;
+                        echo $item->type;
                     }
 
                     array_push($messages, json_encode($disc, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
