@@ -106,20 +106,18 @@ namespace Controllers {
                     ];
 
                     foreach ($body->data->items as $item) {
-                        $l = $disc["embeds"][0]["fields"];
                         if ($item->type === "Donation") {
-                            array_push($l, [
+                            array_push($disc["embeds"][0]["fields"], [
                                 "name" => "Don",
                                 "value" => "Don pour la MDL de **" . strval($item->amount / 100) . "€**"
                             ]);
                         } else {
-                            array_push($l, [
+                            array_push($disc["embeds"][0]["fields"], [
                                 "name" => $item->name,
                                 "value" => "Pour **" . $item->user->firstName . " " . $item->user->lastName . "** en **" . $item->customFields[2]->answer . "**\n" 
                                 . "Participation à l'élection : **" . $item->customFields[0]->answer . "**"
                             ]);
-                        }
-                        echo $item->type;
+                        };
                     }
 
                     array_push($messages, json_encode($disc, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
