@@ -83,7 +83,7 @@ namespace Controllers {
 
                                 // Embed Description
                                 "description" => "**" . $body->data->payer->firstName . " "
-                                . $body->data->payer->lastName 
+                                . $body->data->payer->lastName
                                 . "** vient de passer une commande pour le bal de promo d'un total de **"
                                 . strval($body->data->amount->total / 100) . "€** !\n\n**Détail de la commande :**",
 
@@ -108,16 +108,17 @@ namespace Controllers {
                     foreach ($body->data->items as $item) {
                         if ($item->type === "Donation") {
                             array_push($disc["embeds"][0]["fields"], [
-                                "name" => "Don",
+                                "name" => "- Don",
                                 "value" => "Don pour la MDL de **" . strval($item->amount / 100) . "€**"
                             ]);
                         } else {
                             array_push($disc["embeds"][0]["fields"], [
-                                "name" => $item->name,
-                                "value" => "Pour **" . $item->user->firstName . " " . $item->user->lastName . "** en **" . $item->customFields[2]->answer . "**\n" 
+                                "name" => "- " . $item->name,
+                                "value" => "Pour **" . $item->user->firstName . " " . $item->user->lastName . "** en **" . $item->customFields[2]->answer . "**\n"
                                 . "Participation à l'élection : **" . $item->customFields[0]->answer . "**"
                             ]);
-                        };
+                        }
+                        ;
                     }
 
                     array_push($messages, json_encode($disc, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
