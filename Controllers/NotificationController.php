@@ -60,7 +60,7 @@ namespace Controllers {
             if ($body->eventType === "Order") {
 
                 if ($body->data->formSlug === "bal-de-promo-2023") {
-                    array_push($urls, $webhookurlbal);
+                    array_push($urls, $webhookurl);
                     $timestamp = date("c", strtotime("now"));
 
                     $disc = [
@@ -83,12 +83,11 @@ namespace Controllers {
 
                                 // Embed Description
                                 "description" => "**" . $body->data->payer->firstName . " "
-                                . $body->data->payer->lastName . "** en **"
-                                . $body->data->items[0]->customFields[2]->answer
+                                . $body->data->payer->lastName 
                                 . "** vient de passer une commande pour le bal de promo d'un total de **"
-                                . strval($body->data->amount->total / 100) . "€** ! Ce(tte) visiteur(euse) "
-                                . ($body->data->items[0]->customFields[0]->answer === "Oui" ? "participera" : "ne participera pas")
-                                . " à l'élection du roi/de la reine du bal.",
+                                . strval($body->data->amount->total / 100) . "€** !\n\n**Détail de la commande :**",
+
+                                "fields" => [],
 
                                 // Timestamp of embed must be formatted as ISO8601
                                 "timestamp" => $timestamp,
@@ -105,6 +104,22 @@ namespace Controllers {
                         ]
 
                     ];
+
+                    foreach ($body->data->items as $item) {
+                        $l = $disc["embeds"][0]["fields"];
+                        if ($item->type === "Donation") {
+                            array_push($l, [
+                                "name" => "Don",
+                                "value" => "Don pour la MDL de **" . strval($item->amount / 100) . "€**"
+                            ]);
+                        } else {
+                            array_push($l, [
+                                "name" => $item->name,
+                                "value" => "Pour **" . $item->user->firstName . " " . $item->user->lastName . "** en **" . $item->customFields[2]->answer . "**\n" 
+                                . "Participation à l'élection : **" . $item->customFields[0]->answer . "**"
+                            ]);
+                        }
+                    }
 
                     array_push($messages, json_encode($disc, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
                     array_push($messages, json_encode($disc, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
