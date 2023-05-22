@@ -37,6 +37,7 @@ namespace Controllers {
             $body = json_decode(file_get_contents('php://input'));
             $webhookurl = $_ENV['DISCORD_WEBHOOK_URL'];
             $webhookurlbal = $_ENV['DISCORD_WEBHOOK_URL_BAL'];
+            $webhookurlphotos = $_ENV['DISCORD_WEBHOOK_URL_PHOTOS'];
             $urls = [$webhookurl];
             $messages = [];
             $fun = [
@@ -116,6 +117,72 @@ namespace Controllers {
                                 "name" => "- " . $item->name,
                                 "value" => "Pour **" . $item->user->firstName . " " . $item->user->lastName . "** en **" . $item->customFields[2]->answer . "**\n"
                                 . "Participation à l'élection : **" . $item->customFields[0]->answer . "**"
+                            ]);
+                        }
+                        ;
+                    }
+
+                    array_push($messages, json_encode($disc, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+                    array_push($messages, json_encode($disc, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+                }
+
+                if ($body->data->formSlug === "photos-de-classe-2022-2023") {
+                    array_push($urls, $webhookurlphotos);
+                    $timestamp = date("c", strtotime("now"));
+
+                    $disc = [
+                        "username" => "MDL - Photos de classe",
+                        "avatar_url" =>
+                        "https://cdn.helloasso.com/img/logos/croppedimage-234b7b32a4ab4e269abee0c035e3f36c.png?resize=fill:140:140",
+                        "tts" => false,
+
+                        // File upload
+                        // "file" => "",
+
+                        // Embeds Array
+                        "embeds" => [
+                            [
+                                // Embed Title
+                                "title" => "Nouvelle vente pour les photos de classe",
+
+                                // Embed Type
+                                "type" => "rich",
+
+                                // Embed Description
+                                "description" => "**" . $body->data->payer->firstName . " "
+                                . $body->data->payer->lastName
+                                . "** vient de passer une commande pour les photos de classe d'un total de **"
+                                . strval($body->data->amount->total / 100) . "€** !\n\n**Détail de la commande :**",
+
+                                "fields" => [],
+
+                                // Timestamp of embed must be formatted as ISO8601
+                                "timestamp" => $timestamp,
+
+                                // Embed left border color in HEX
+                                "color" => hexdec("ffffff"),
+
+                                // Author
+                                "author" => [
+                                    "name" => $fun[array_rand($fun)]
+                                ]
+                            ]
+
+                        ]
+
+                    ];
+
+                    foreach ($body->data->items as $item) {
+                        if ($item->type === "Donation") {
+                            array_push($disc["embeds"][0]["fields"], [
+                                "name" => "- Don",
+                                "value" => "Don pour la MDL de **" . strval($item->amount / 100) . "€**"
+                            ]);
+                        } else {
+                            array_push($disc["embeds"][0]["fields"], [
+                                "name" => "- " . $item->name,
+                                "value" => "Pour **" . $item->customFields[1]->answer . " " . $item->customFields[0]->answer . "** en **" . $item->customFields[2]->answer . "**\n"
+                                . "Numéro de photo : **" . $item->customFields[3]->answer . "**"
                             ]);
                         }
                         ;
