@@ -1,3 +1,19 @@
+# Pourquoi ce projet ?
+
+## Cadre
+
+Lorsque j'étais membre de la Maison Des Lycéens de mon lycée, nous organisions des événements et utilisions la billetterie HelloAsso.  
+
+## Besoin
+
+Permettre à toute l'équipe d'être notifiée lors de l'achat d'une nouvelle place pour le bal de fin d'année ou autre événement directement sur notre serveur Discord (sans déléguer l'accès à HelloAsso à tout le monde).
+
+## Réalisation
+
+A partir de l'exemple fourni par HelloAsso j'ai créé une petite app en PHP qui transformait les données transmises par HelloAsso à chaque achat en données formatées pour les WebHooks Discord.
+
+# Doc originale
+
 Il vous est possible de configurer une URL de notification depuis le BO de votre association.
 Cette URL recevra alors des notifications de la part de HelloAsso.
 Il en existe trois types:
